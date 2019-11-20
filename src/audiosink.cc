@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QEventLoop>
 #include <QDebug>
+#include "myalsaaudiooutput.hh"
 
 
 /* ********************************************************************************************* *
@@ -40,7 +41,8 @@ QAudioSink::setOutputDevice(const QAudioDeviceInfo &output_device) {
     return;
 
   if (_output) {
-    _output->stop();
+    if (QAudio::StoppedState != _output->state())
+      _output->stop();
     delete _output;
     _output = nullptr;
   }
@@ -58,9 +60,11 @@ QAudioSink::setOutputDevice(const QAudioDeviceInfo &output_device) {
   }
 
   _output_device = output_device;
-  _output = new QAudioOutput(_output_device, fmt, this);
+  _output = new MyAlsaAudioOutput("default");
+  _output->setFormat(fmt);
   _output->setVolume(_volume);
-  _output->start(this);
+  if (QAudio::ActiveState != _output->state())
+    _output->start(this);
 }
 
 void

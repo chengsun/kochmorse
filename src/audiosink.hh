@@ -7,6 +7,7 @@
 #include <QIODevice>
 #include <QAudioOutput>
 #include <QAudioInput>
+#include "myalsaaudiooutput.hh"
 
 
 class QAudioSink: public QIODevice
@@ -44,7 +45,7 @@ protected:
 
 protected:
   /** The port-audio stream. */
-  QAudioOutput *_output;
+  MyAlsaAudioOutput *_output;
   /** Holds the current output audio device of _output. */
   QAudioDeviceInfo _output_device;
   /** Holds the audio source. */
